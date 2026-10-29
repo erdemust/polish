@@ -76,7 +76,7 @@ geojson_data = {
         "features": [
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [2.35, 48.85]},"properties": {"ad": "Paris / Saint-Cyr", "aciklama": "1837/40 doğumlu, Michał Czajkowski'nin oğlu, 1861'de Saint-Cyr mezunu"}},
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [28.9784, 41.0082]},"properties": {"ad": "İstanbul", "aciklama": "Fuad Paşa ve Sultan Abdülaziz yaverliği, 93 Harbi Plevne savunması, müşir"}},
-            {"type": "Feature","geometry": {"type": "Point", "coordinates": [35.50, 33.89]},"properties": {"ad": "Cebel-i Lübnan", "aciklama": "1902-1907 mutasarrıf, uluslararası anlaşmayla Katolik Osmanlı valisi, 1907 Beyrut'ta vefat"}},
+            {"type": "Feature","geometry": {"type": "Point", "coordinates": [35.50, 33.89]},"properties": {"ad": "Cebel-i Lübnان", "aciklama": "1902-1907 mutasarrıf, uluslararası anlaşmayla Katolik Osmanlı valisi, 1907 Beyrut'ta vefat"}},
             {"type": "Feature","geometry": {"type": "LineString", "coordinates": [[2.35, 48.85], [28.9784, 41.0082], [35.50, 33.89]]},"properties": {"ad": "Yaşam Rotası", "aciklama": "Paris -> İstanbul -> Cebel-i Lübnan (Beyrut)"}}
         ]
     }
@@ -112,33 +112,68 @@ biyografiler = {
     """
 }
 
+# Paşalara ait Wikimedia portre görselleri
+fotolar = {
+    "Michał Czajkowski / Mehmed Sadık Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Micha%C5%82_Czajkowski_by_Kieszkowski.jpg/440px-Micha%C5%82_Czajkowski_by_Kieszkowski.jpg",
+    "Józef Bem / Murad Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/J%C3%B3zef_Bem_by_Klimowicz.jpg/440px-J%C3%B3zef_Bem_by_Klimowicz.jpg",
+    "Antoni Iliński / Mehmed İskender Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Antoni_Ili%C5%84ski.jpg/440px-Antoni_Ili%C5%84ski.jpg",
+    "Konstanty Borzęcki / Mustafa Celaleddin Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mustafa_Celaleddin_Pasha.jpg/440px-Mustafa_Celaleddin_Pasha.jpg",
+    "Władysław Czajkowski / Muzaffer Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/W%C5%82adys%C5%82aw_Czajkowski_%28Muzaffar_Pasha%29.jpg/440px-W%C5%82adys%C5%82aw_Czajkowski_%28Muzaffar_Pasha%29.jpg"
+}
+
 # ---------------------------------------------------------
 # 5. Ana İçerik
 # ---------------------------------------------------------
 st.header(secim)
-st.markdown(biyografiler[secim])
 
-# Harita verileri
+# İki sütunlu yapı: Sol tarafta biyografi metni, sağ tarafta paşanın fotoğrafı
+col_bio, col_img = st.columns([2, 1])
+
+with col_bio:
+    st.markdown(biyografiler[secim])
+
+with col_img:
+    if secim in fotolar:
+        st.image(fotolar[secim], caption=secim.split('/')[0].strip(), use_container_width=True)
+
+st.divider()
+
+# Harita verileri ve Dinamik Nokta Renklendirmesi
 secili_geojson = geojson_data[secim]
 points = [f for f in secili_geojson["features"] if f["geometry"]["type"] == "Point"]
 lines = [f for f in secili_geojson["features"] if f["geometry"]["type"] == "LineString"]
 
-df_points = pd.DataFrame([{
-    "lat": f["geometry"]["coordinates"][1],
-    "lon": f["geometry"]["coordinates"][0],
-    "ad": f["properties"]["ad"],
-    "aciklama": f["properties"]["aciklama"]
-} for f in points])
+# Rota çizgisiyle uyumlu renk geçişleri (Mavi/Mor/Kırmızı tonları)
+colors = [
+    [50, 150, 250, 200],   # 1. Durak (Başlangıç)
+    [80, 120, 220, 200],   # 2. Durak
+    [120, 80, 200, 200],   # 3. Durak
+    [180, 50, 150, 200],   # 4. Durak
+    [220, 30, 30, 200]     # 5. Durak (Bitiş)
+]
+
+points_list = []
+for i, f in enumerate(points):
+    c = colors[i] if i < len(colors) else [220, 30, 30, 200]
+    points_list.append({
+        "lat": f["geometry"]["coordinates"][1],
+        "lon": f["geometry"]["coordinates"][0],
+        "ad": f["properties"]["ad"],
+        "aciklama": f["properties"]["aciklama"],
+        "renk": c
+    })
+
+df_points = pd.DataFrame(points_list)
 
 st.subheader("🗺️ Yaşam Yolu Haritası")
 
-# Pydeck ile hem noktalar hem rota çizgisi
+# Pydeck Katmanları
 layer_points = pdk.Layer(
     "ScatterplotLayer",
     df_points,
     get_position='[lon, lat]',
-    get_radius=20000,
-    get_fill_color=[200, 30, 30, 160],
+    get_radius=22000,
+    get_fill_color='renk',  # Dinamik renk ataması
     pickable=True
 )
 
@@ -174,15 +209,15 @@ st.write("**Haritadaki Konumlar:**")
 for _, row in df_points.iterrows():
     st.write(f"- **{row['ad']}**: {row['aciklama']}")
 
-col1, col2 = st.columns(2)
-with col1:
+col_dl1, col_dl2 = st.columns(2)
+with col_dl1:
     st.download_button(
         label="📥 GeoJSON İndir",
         data=json.dumps(secili_geojson, ensure_ascii=False, indent=2),
         file_name=f"{secim.split('/')[0].strip().replace(' ', '_')}_rota.geojson",
         mime="application/geo+json"
     )
-with col2:
+with col_dl2:
     st.download_button(
         label="📄 Biyografi (TXT)",
         data=biyografiler[secim],
