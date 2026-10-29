@@ -49,7 +49,7 @@ geojson_data = {
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [37.17, 36.20]},"properties": {"ad": "Halep", "aciklama": "Halep Valisi, 10 Aralık 1850'de vefat, naaşı 1929'da Tarnów'a nakledildi"}},
             {"type": "Feature","geometry": {"type": "LineString", "coordinates": [[20.96, 50.01],[21.01,52.23],[19.04,47.5],[28.9784,41.0082],[37.17,36.2],[20.96,50.01]]},"properties": {"ad": "Yaşam Rotası", "aciklama": "Tarnów -> Varşova -> Budapeşte -> İstanbul -> Halep -> Tarnów"}}
         ]
-    },
+    }
     "Antoni Iliński / Mehmed İskender Paşa": {
         "type": "FeatureCollection",
         "features": [
@@ -57,7 +57,9 @@ geojson_data = {
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [28.9784, 41.0082]},"properties": {"ad": "İstanbul", "aciklama": "1844'te Osmanlı hizmetine girdi, tutukluyken İslam'ı kabul edip Mehmed İskender oldu"}},
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [33.5, 44.5]},"properties": {"ad": "Kırım (Karakul / Gözleve)", "aciklama": "28 Mayıs 1854 Karakul galibi, Gözleve'de mirliva / paşa rütbesi"}},
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [44.36, 33.32]},"properties": {"ad": "Bağdat", "aciklama": "Bağdat Valiliği, Arap aşiretleri arasında 'Ebû'n-nar / Ateş Babası' lakabı"}},
-            {"type": "Feature","geometry": {"type": "Point", "coordinates": [28.94, 41.03]},"properties": {"ad": "Edirnekapı Şehitliği", "aciklama": "2 Temmuz 1861'de İstanbul'da vefat, mezarı burada"}}
+            {"type": "Feature","geometry": {"type": "Point", "coordinates": [28.94, 41.03]},"properties": {"ad": "Edirnekapı Şehitliği", "aciklama": "2 Temmuz 1861'de İstanbul'da vefat, mezarı burada"}},
+            # Rota Çizgisi Eklendi:
+            {"type": "Feature","geometry": {"type": "LineString", "coordinates": [[27.1, 49.1], [28.9784, 41.0082], [33.5, 44.5], [44.36, 33.32], [28.94, 41.03]]},"properties": {"ad": "Yaşam Rotası", "aciklama": "Podolya -> İstanbul -> Kırım -> Bağdat -> İstanbul (Edirnekapı)"}}
         ]
     },
     "Konstanty Borzęcki / Mustafa Celaleddin Paşa": {
@@ -66,7 +68,9 @@ geojson_data = {
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [19.69, 51.40]},"properties": {"ad": "Modrzewiec, Polonya", "aciklama": "10 Nisan 1826 doğumlu"}},
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [28.9784, 41.0082]},"properties": {"ad": "İstanbul", "aciklama": "1849'da geldi, harita şubesinde yüzbaşı, Ömer Paşa'nın kızıyla evlendi"}},
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [28.9784, 41.0082]},"properties": {"ad": "Edebi Miras", "aciklama": "1869'da Les Turcs Anciens et Modernes - Türkçülüğün ilk manifestosu, Atatürk'ün kütüphanesinde"}},
-            {"type": "Feature","geometry": {"type": "Point", "coordinates": [19.26, 42.44]},"properties": {"ad": "Karadağ Cephesi / Novosela", "aciklama": "9 Ekim 1876'da Karadağ'da yaralandı, Novosela'da şehit oldu"}}
+            {"type": "Feature","geometry": {"type": "Point", "coordinates": [19.26, 42.44]},"properties": {"ad": "Karadağ Cephesi / Novosela", "aciklama": "9 Ekim 1876'da Karadağ'da yaralandı, Novosela'da şehit oldu"}},
+            # Rota Çizgisi Eklendi:
+            {"type": "Feature","geometry": {"type": "LineString", "coordinates": [[19.69, 51.40], [28.9784, 41.0082], [19.26, 42.44]]},"properties": {"ad": "Yaşam Rotası", "aciklama": "Polonya -> İstanbul -> Karadağ Cephesi"}}
         ]
     },
     "Władysław Czajkowski / Muzaffer Paşa": {
@@ -74,9 +78,12 @@ geojson_data = {
         "features": [
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [2.35, 48.85]},"properties": {"ad": "Paris / Saint-Cyr", "aciklama": "1837/40 doğumlu, Michał Czajkowski'nin oğlu, 1861'de Saint-Cyr mezunu"}},
             {"type": "Feature","geometry": {"type": "Point", "coordinates": [28.9784, 41.0082]},"properties": {"ad": "İstanbul", "aciklama": "Fuad Paşa ve Sultan Abdülaziz yaverliği, 93 Harbi Plevne savunması, müşir"}},
-            {"type": "Feature","geometry": {"type": "Point", "coordinates": [35.50, 33.89]},"properties": {"ad": "Cebel-i Lübnan", "aciklama": "1902-1907 mutasarrıf, uluslararası anlaşmayla Katolik Osmanlı valisi, 1907 Beyrut'ta vefat"}}
+            {"type": "Feature","geometry": {"type": "Point", "coordinates": [35.50, 33.89]},"properties": {"ad": "Cebel-i Lübnan", "aciklama": "1902-1907 mutasarrıf, uluslararası anlaşmayla Katolik Osmanlı valisi, 1907 Beyrut'ta vefat"}},
+            # Rota Çizgisi Eklendi:
+            {"type": "Feature","geometry": {"type": "LineString", "coordinates": [[2.35, 48.85], [28.9784, 41.0082], [35.50, 33.89]]},"properties": {"ad": "Yaşam Rotası", "aciklama": "Paris -> İstanbul -> Cebel-i Lübnan (Beyrut)"}}
         ]
     }
+
 }
 
 biyografiler = {
