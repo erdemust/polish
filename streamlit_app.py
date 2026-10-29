@@ -1,10 +1,4 @@
-from pathlib import Path
-import zipfile, textwrap, json, os
-
-base = Path("/mnt/data/polonyali_pasalar_streamlit")
-(base / "tests").mkdir(parents=True, exist_ok=True)
-
-app_code = r'''from __future__ import annotations
+from __future__ import annotations
 
 import csv
 import html
@@ -20,7 +14,6 @@ from streamlit_folium import st_folium
 
 # ============================================================
 # Osmanlı Ordusundaki Polonyalı Paşalar
-# Fotoğraflar, GitHub'daki mevcut dosyalardan önce yüklenir.
 # ============================================================
 
 st.set_page_config(
@@ -56,7 +49,7 @@ Prens Adam Czartoryski'nin çevresiyle ilişkili olarak Osmanlı başkentinde fa
             ("Borki / Ukrayna (yaklaşık)", 50.5, 31.5,
              "1872'de bölgeye döndüğü, 1886'da öldüğü aktarılır. Konum yaklaşık işaretlenmiştir."),
         ],
-        "route": [ [41.11, 29.11], [41.0082, 28.9784], [44.5, 32.0] ],
+        "route": [[41.11, 29.11], [41.0082, 28.9784], [44.5, 32.0]],
         "route_name": "Şematik yaşam rotası",
         "route_note": "Çizgi, seçilmiş tarihsel durakları görselleştiren şematik bir bağlantıdır; belgelenmiş seyahat güzergâhı değildir.",
     },
@@ -170,7 +163,6 @@ PALETA = ["#1677ff", "#4666d5", "#8055c7", "#c04a9a", "#dc3030"]
 
 
 def validate_person(person: dict[str, Any]) -> None:
-    """Kişi verisinde gerekli alanları ve koordinatları kontrol et."""
     required = {"dates", "images", "bio", "features", "route", "route_name", "route_note"}
     missing = required.difference(person)
     if missing:
@@ -188,7 +180,6 @@ def validate_person(person: dict[str, Any]) -> None:
 
 
 def make_geojson(person: dict[str, Any], person_name: str) -> dict[str, Any]:
-    """Kişinin duraklarını ve şematik rotasını GeoJSON'a çevir."""
     validate_person(person)
     features = []
     for index, (name, lat, lon, description) in enumerate(person["features"], start=1):
@@ -222,7 +213,6 @@ def make_geojson(person: dict[str, Any], person_name: str) -> dict[str, Any]:
 
 
 def make_map(person: dict[str, Any], person_name: str, show_route: bool = True) -> folium.Map:
-    """Duraklar, popup'lar, rota ve katman kontrolleriyle Folium haritası oluştur."""
     validate_person(person)
     locations = [(float(lat), float(lon)) for _, lat, lon, _ in person["features"]]
     center = [
@@ -235,7 +225,6 @@ def make_map(person: dict[str, Any], person_name: str, show_route: bool = True) 
     MiniMap(toggle_display=True, position="bottomright").add_to(fmap)
 
     points_layer = folium.FeatureGroup(name="Yaşam durakları", show=True)
-    count = len(person["features"])
     for index, (name, lat, lon, description) in enumerate(person["features"], start=1):
         color = PALETA[min(index - 1, len(PALETA) - 1)]
         popup_html = f"""
@@ -288,7 +277,6 @@ def build_csv(person: dict[str, Any], person_name: str) -> bytes:
 
 
 def show_portrait(person: dict[str, Any], caption: str) -> None:
-    """GitHub fotoğrafını önce, Wikimedia yedeğini sonra dene."""
     for image_url in person["images"]:
         try:
             st.image(image_url, caption=caption, use_container_width=True)
@@ -423,124 +411,3 @@ with st.expander("Kaynakça ve tarihsel doğrulama notları"):
 
 st.divider()
 st.caption("Streamlit + Folium. Harita döşemelerinin görünmesi için internet bağlantısı gerekir.")
-'''
-
-requirements = """streamlit>=1.36
-folium>=0.16
-streamlit-folium>=0.20
-pandas>=2.0
-pytest>=8.0
-"""
-
-readme = r'''# Osmanlı Ordusundaki Polonyalı Paşalar — Streamlit
-
-## Özellikler
-- Beş paşa için biyografi ve portre
-- GitHub ham dosya bağlantıları önce, Wikimedia görseli yedek olarak
-- Folium haritası, açılır pencereler, katman kontrolü ve şematik rotalar
-- GeoJSON, CSV, TXT ve etkileşimli HTML indirme
-- Koordinat ve veri yapısı kontrolleri
-
-## Kurulum
-
-Python 3.10 veya üstü önerilir.
-
-```bash
-python -m venv .venv
-```
-
-Linux/macOS:
-```bash
-source .venv/bin/activate
-```
-
-Windows PowerShell:
-```powershell
-.venv\Scripts\Activate.ps1
-```
-
-```bash
-python -m pip install --upgrade pip
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-## GitHub Codespaces
-Proje dosyalarını depoya ekledikten sonra terminalde:
-
-```bash
-pip install -r requirements.txt
-streamlit run app.py --server.address 0.0.0.0
-```
-
-Codespaces port yönlendirme ekranında Streamlit'in kullandığı 8501 portunu açın.
-
-## Test
-
-```bash
-pytest -q
-```
-
-## Fotoğraflar
-Fotoğraflar, mevcut depodaki şu GitHub ham bağlantılarından yüklenir:
-- `Michal_Czajkowski_Mehmed_Sadik_Pasa.png`
-- `Jozef_Bem_Murad_Pasa.jpg`
-- `Antoni_Ilinski_Mehmed_Iskender_Pasa.jpg`
-- `Konstanty_Borzecki_Mustafa_Celaleddin_Pasa.jpg`
-- `Wladyslaw_Czajkowski_Muzaffer_Pasa.png`
-
-Fotoğraf dosyalarını yeniden yüklemeniz gerekmez. Uygulama GitHub bağlantısını önce dener; başarısız olursa Wikimedia bağlantısına geçer.
-
-## Tarihsel hassasiyet
-Haritadaki bazı koordinatlar tarihsel bölgeleri yaklaşık temsil eder. Çizgiler şematik görselleştirmelerdir; gerçek seyahat güzergâhları olarak kabul edilmemelidir. Biyografilerdeki özel iddiaları akademik/ birincil kaynaklarla ayrıca doğrulayın.
-'''
-
-test_code = r'''from app import PASALAR, make_geojson, validate_person
-
-
-def test_five_people_exist():
-    assert len(PASALAR) == 5
-
-
-def test_each_person_has_valid_coordinates_and_required_data():
-    for person in PASALAR.values():
-        validate_person(person)
-
-
-def test_geojson_has_points_and_route():
-    for name, person in PASALAR.items():
-        geojson = make_geojson(person, name)
-        assert geojson["type"] == "FeatureCollection"
-        assert sum(f["geometry"]["type"] == "Point" for f in geojson["features"]) == len(person["features"])
-        assert any(f["geometry"]["type"] == "LineString" for f in geojson["features"])
-
-
-def test_invalid_coordinates_are_rejected():
-    bad = {
-        "dates": "x", "images": [], "bio": "", "features": [("bad", 100, 20, "x")],
-        "route": [], "route_name": "x", "route_note": "x"
-    }
-    try:
-        validate_person(bad)
-    except ValueError:
-        pass
-    else:
-        raise AssertionError("Invalid latitude should raise ValueError")
-'''
-
-(base / "app.py").write_text(app_code, encoding="utf-8")
-(base / "requirements.txt").write_text(requirements, encoding="utf-8")
-(base / "README.md").write_text(readme, encoding="utf-8")
-(base / "tests" / "test_app_data.py").write_text(test_code, encoding="utf-8")
-
-zip_path = Path("/mnt/data/osmanli_polonyali_pasalar_streamlit.zip")
-with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
-    for p in base.rglob("*"):
-        if p.is_file():
-            z.write(p, p.relative_to(base.parent))
-
-print(f"Proje oluşturuldu: {zip_path}")
-print("Dosyalar:")
-for p in sorted(base.rglob("*")):
-    if p.is_file():
-        print(f"- {p.relative_to(base)} ({p.stat().st_size:,} bytes)")
