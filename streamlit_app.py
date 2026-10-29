@@ -113,12 +113,13 @@ biyografiler = {
 }
 
 # Paşalara ait Wikimedia portre görselleri
+# Paşalara ait alternatif ve kararlı Wikimedia bağlantıları
 fotolar = {
-    "Michał Czajkowski / Mehmed Sadık Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Micha%C5%82_Czajkowski_by_Kieszkowski.jpg/440px-Micha%C5%82_Czajkowski_by_Kieszkowski.jpg",
-    "Józef Bem / Murad Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c9/J%C3%B3zef_Bem_by_Klimowicz.jpg/440px-J%C3%B3zef_Bem_by_Klimowicz.jpg",
-    "Antoni Iliński / Mehmed İskender Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5a/Antoni_Ili%C5%84ski.jpg/440px-Antoni_Ili%C5%84ski.jpg",
-    "Konstanty Borzęcki / Mustafa Celaleddin Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Mustafa_Celaleddin_Pasha.jpg/440px-Mustafa_Celaleddin_Pasha.jpg",
-    "Władysław Czajkowski / Muzaffer Paşa": "https://upload.wikimedia.org/wikipedia/commons/thumb/2/22/W%C5%82adys%C5%82aw_Czajkowski_%28Muzaffar_Pasha%29.jpg/440px-W%C5%82adys%C5%82aw_Czajkowski_%28Muzaffar_Pasha%29.jpg"
+    "Michał Czajkowski / Mehmed Sadık Paşa": "https://upload.wikimedia.org/wikipedia/commons/1/1a/Micha%C5%82_Czajkowski_by_Kieszkowski.jpg",
+    "Józef Bem / Murad Paşa": "https://upload.wikimedia.org/wikipedia/commons/c/c9/J%C3%B3zef_Bem_by_Klimowicz.jpg",
+    "Antoni Iliński / Mehmed İskender Paşa": "https://upload.wikimedia.org/wikipedia/commons/5/5a/Antoni_Ili%C5%84ski.jpg",
+    "Konstanty Borzęcki / Mustafa Celaleddin Paşa": "https://upload.wikimedia.org/wikipedia/commons/3/36/Mustafa_Celaleddin_Pasha.jpg",
+    "Władysław Czajkowski / Muzaffer Paşa": "https://upload.wikimedia.org/wikipedia/commons/2/22/W%C5%82adys%C5%82aw_Czajkowski_%28Muzaffar_Pasha%29.jpg"
 }
 
 # ---------------------------------------------------------
